@@ -15,6 +15,10 @@
 #define SOCKET_ERROR -1
 #endif 
 
+#ifndef SOCKET_INVALID
+#define SOCKET_INVALID 0
+#endif 
+
 #ifndef SOCKET_SUCCESS
 #define SOCKET_SUCCESS 1
 #endif
@@ -32,7 +36,7 @@ public:
 
         udpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
-        if (udpSocket == INVALID_SOCKET || !ip.isValid() || !port.isValid())
+        if (udpSocket == SOCKET_INVALID)
         {
             std::cerr << "Failed to create socket: " << WSAGetLastError() << std::endl;
             m_initialized = false;
@@ -42,12 +46,12 @@ public:
         m_initialized = true;
         serverAddr.sin_family = AF_INET;
         serverAddr.sin_port = htons(port.getValue());
-        inet_pton(AF_INET, ip.getIpAddrStr().c_str(), &serverAddr.sin_addr);
+        inet_pton(AF_INET, ip.getValue().c_str(), &serverAddr.sin_addr);
     }
 
     ~SocketClientUDP()
     {
-        if (udpSocket != INVALID_SOCKET)
+        if (udpSocket != SOCKET_INVALID)
             closesocket(udpSocket);
         
         if (m_initialized)
@@ -62,7 +66,7 @@ public:
 
     int send(std::string msg) const
     {
-        if (udpSocket == INVALID_SOCKET || msg.empty())
+        if (udpSocket == SOCKET_INVALID || msg.empty())
             return SOCKET_ERROR;
 
         std::string msgToSend = msg;
@@ -80,7 +84,7 @@ public:
         return SOCKET_SUCCESS;
     }
 private:
-    SOCKET udpSocket = INVALID_SOCKET;
+    SOCKET udpSocket = SOCKET_INVALID;
     sockaddr_in serverAddr{};
     WSADATA wsaData{};
     bool m_initialized = false;

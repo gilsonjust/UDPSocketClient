@@ -16,7 +16,7 @@ public:
 		m_ipAddr = m_isValidIP ? ip : "";
 	}
 
-	std::string getIpAddrStr() const
+	std::string getValue () const
 	{
 		return m_ipAddr;
 	}

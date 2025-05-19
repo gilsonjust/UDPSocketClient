@@ -13,10 +13,10 @@ int main()
 	SocketClientUDP udpSocket(ip, port);
 
 	/* Send some data over the network */
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		Sleep(500);
-		udpSocket.send("test UDP port: " + std::to_string(i));
+		udpSocket.send("UDP Data: " + std::to_string(i));
 	}
 		
 	/* Close socket */
